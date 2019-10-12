@@ -1,0 +1,21 @@
+{
+    "figure.dpi": 72,
+    "figure.figsize": [8,8],
+    
+    "xtick.direction": "in",
+    "ytick.direction": "in",
+    "xtick.major.width": 1.0,
+    "ytick.major.width": 1.0,
+    "xtics.major.size": 10, 
+    
+    
+    "font.family": "sans-serif",
+    "font.size":8,
+    
+    
+    "axes.linewidth": 1.0,
+    "axes.formatter.useoffset": "False"
+    
+    
+    
+}
