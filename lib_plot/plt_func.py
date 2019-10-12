@@ -28,7 +28,6 @@ class MakePlot :
         self.yerr = yerr
         self.color_list = ["red", "blue"]
     
-    
     def read_settings(self, ):
         """
         設定ファイルの読み込み
@@ -40,8 +39,7 @@ class MakePlot :
         for key, val in settings:
             plt.rcParams[key] = val
     
-    
-    def calculate_mean(self, y=self.y_copy, transpose=False):
+    def calculate_mean(self, transpose=False):
         """
         平均値，標準偏差，標準誤差を計算する関数
         
@@ -51,11 +49,12 @@ class MakePlot :
         """
         # 転置したいとき
         if transpose:
-            if type( np.array(y)[0] ) == np.ndarray:
-                y = np.array(y).T
+            if type( np.array(self.y_copy)[0] ) == np.ndarray:
+                y = np.array(self.y_copy).T
             else:
                 raise ValueError("y 内の配列の長さが異なるため転置できません")
         
+        y = self.y_copy
         mean_list = []
         std_list = []
         se_list = []
@@ -81,7 +80,7 @@ class MakePlot :
         return mean_list, std_list, se_list
     
     
-    def bar_graph_from_scratch(self, x=self.x, error_bar="SE", xlabel=None, ylabel=None, title=None):
+    def bar_graph_from_scratch(self, error_bar="SE", xlabel=None, ylabel=None, title=None):
         """
         データから平均値, 標準偏差（標準誤差）を計算し，棒グラフを計算する
         
@@ -97,18 +96,18 @@ class MakePlot :
         mean_list, std_list, se_list = calculate_mean(self.y_copy)
         
         if error_bar=="SE":
-            fig, ax = self.bar_graph_by_mean(x=x, y=mean_list, yerr=se_list, xlabel=xlabel, title=title)
+            fig, ax = self.bar_graph_by_mean(x=self.x, y=mean_list, yerr=se_list, xlabel=xlabel, title=title)
         elif error_bar=="STD":
-            fig, ax = self.bar_graph_by_mean(x=x, y=mean_list, yerr=std_list, ylabel=ylabel, title=title)
+            fig, ax = self.bar_graph_by_mean(x=self.x, y=mean_list, yerr=std_list, ylabel=ylabel, title=title)
         else:
             yerr = [ 0 for i in range( len(mean_list) ) ]
-            fig, ax = self.bar_graph_by_mean(x=x, y=mean_list, yerr=yerr, xlabel=xlabel, ylabel=ylabel, title=title)
+            fig, ax = self.bar_graph_by_mean(x=self.x, y=mean_list, yerr=yerr, xlabel=xlabel, ylabel=ylabel, title=title)
         
         
         return fig, ax
     
     
-    def bar_graph_by_mean(self, x=self.x, y=self.y_copy, yerr=self.yerr, width=0.8, color="blue", log=False, xlabel=None, ylabel=None, title=None):
+    def bar_graph_by_mean(self, x=None, y=None, yerr=None, width=0.8, color="blue", log=False, xlabel=None, ylabel=None, title=None):
         """
         棒グラフ 2つの比較，複数の比較
         平均，標準偏差（標準誤差）が分かっているときに用いる関数
@@ -121,7 +120,15 @@ class MakePlot :
         
         """
         if x is None:
+            x = self.x
+        if self.x is None:
             x = [i for i in range(1, len(y)+1)]
+        
+        if y is None:
+            y = self.y_copy
+        
+        if yerr is None:
+            yerr = self.yerr
         
         self.axis_.bar(
             x=x, 
@@ -143,7 +150,7 @@ class MakePlot :
         return self.figure, self.axix_
     
     
-    def multiple_bar_graph(self, legends, y=self.y_copy, x=self.x, width=None, error_type="SE", xlabel=None, ylabel=None, title=None):
+    def multiple_bar_graph(self, legends, x=None, y=None, width=None, error_type="SE", xlabel=None, ylabel=None, title=None):
         """
         1つのラベルに対して2個以上の棒グラフを作成
         
@@ -156,6 +163,11 @@ class MakePlot :
         -----------------------------
         
         """
+        if x is None:
+            x = self.x
+        if y is None:
+            y = self.y_copy
+        
         bar_num = len(legends)  # 1ラベルに対する棒グラフの数
         left = np.arange(len(x))
         mean_list, std_list, se_list = calculate_mean(y)  # 2次元配列が返ってくる
@@ -232,7 +244,7 @@ class MakePlot :
         return self.figure, self.axis_
     
     
-    def line_graph(self, legends, x=self.x, xlabel=None, ylabel=None, title=None, yrange=[]):
+    def line_graph(self, legends, x=None, xlabel=None, ylabel=None, title=None, yrange=[]):
         """
         折れ線グラフ作成関数
         
@@ -246,6 +258,9 @@ class MakePlot :
         -----------------------------
         
         """
+        if x is None:
+            x = self.x
+        
         for i,arr in enumerate(self.y_copy):
             self.axis_.plot(self.x, arr, label=legends[i])
         
@@ -283,7 +298,7 @@ class MakePlot :
         return self.figure, self.axis_
     
     
-    def histogram_graph(self, y=self.y_copy, bins=50, normed=False, xlabel=None, ylabel=None, title=None):
+    def histogram_graph(self, y=None, bins=50, normed=False, xlabel=None, ylabel=None, title=None):
         """
         ヒストグラムの作成
         
@@ -292,6 +307,9 @@ class MakePlot :
         normed: boolen型  Trueの場合，縦軸の和が1.0になるように正規化
         
         """
+        if y is None:
+            y = self.y_copy
+        
         self.axis_.hist(y, bins=bins, normed=True)
         self.axis_.set_xlabel(xlabel)
         self.axis_.set_ylabel(ylabel)
