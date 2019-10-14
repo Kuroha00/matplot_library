@@ -27,6 +27,7 @@ matplotlibの設定(settings.json)を読み込んで設定する
 生データから平均，標準偏差，標準誤差を算出する
 
 - bar_graph_from_scratch ( )  
+棒グラフを出力する関数
 
 
 - bar_graph_by_mean ( )  
@@ -43,17 +44,17 @@ yの形状が(3,2,100)である場合，2が横軸のラベル数，3が凡例�
 
 
 - cumulative_bar_graph ( )  
-積み上げグラフを作成  
+積み上げグラフを出力する関数  
 
 
 - line_graph ( )  
-折れ線グラフを作成
+折れ線グラフを出力する関数
 
 
 - box_whisker_graph ( )  
-箱ひげ図を作成
+箱ひげ図を出力する関数
 
 
 - histogram_graph ( )  
-ヒストグラフを作成
+ヒストグラフを出力する関数
 
