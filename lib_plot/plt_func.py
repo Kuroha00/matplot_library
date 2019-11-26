@@ -313,12 +313,16 @@ class MakeGraph :
         return self.figure, self.axis_
     
     
-    def box_whisker_graph(self, xlabel=None, ylabel=None, title=None):
+    def box_whisker_graph(self, y=None, xlabel=None, ylabel=None, title=None):
         """
         箱ひげ図の作成
         
         """
-        self.axis_.boxplot(self.y_copy, whis="range")
+        if y is None:
+            y = self.y_copy
+        
+        y = np.array(y).astype("np.float64")
+        self.axis_.boxplot(y, whis="range")
         self.axis_.set_xticklabels(self.x)
         
         self.axis_.set_xlabel(xlabel)
@@ -343,6 +347,7 @@ class MakeGraph :
         if y is None:
             y = self.y_copy
         
+        y = np.array(y).astype("np.float64")
         self.axis_.hist(y, bins=bins, normed=True)
         self.axis_.set_xlabel(xlabel)
         self.axis_.set_ylabel(ylabel)
