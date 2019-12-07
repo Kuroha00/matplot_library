@@ -14,11 +14,15 @@ import numpy as np
 
 
 class MakeGraph :
-    def __init__(self, y, x=None, yerr=None):
+    def __init__(self, y, x=None, yerr=None, figsize=None):
         """
         コンストラクタ
         """
         self.read_settings()
+        if figsize is not None:
+            self.figure = plt.figure(figsize=figsize)
+        else: 
+            self.figure = plt.figure()  # (8, 8)
         
         self.figure = plt.figure()
         self.axis_ = self.figure.add_subplot(111)
